@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum MemberRole {
+  OWNER
+  MEMBER
+}
+
+model User {
+  id              String        @id @default(cuid())
+  email           String        @unique
+  passwordHash    String
+  name            String?
+  boards          Board[]
+  memberships     BoardMember[]
+  sentInvitations Invitation[]  @relation("SentInvitations")
+  createdAt       DateTime      @default(now())
+}
+
+model Board {
+  id          String        @id @default(cuid())
+  title       String
+  position    String
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  columns     Column[]
+  members     BoardMember[]
+  invitations Invitation[]
+  createdAt   DateTime      @default(now())
+
+  @@index([userId])
+}
+
+model BoardMember {
+  id       String     @id @default(cuid())
+  boardId  String
+  userId   String
+  role     MemberRole @default(MEMBER)
+  board    Board      @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  joinedAt DateTime   @default(now())
+
+  @@unique([boardId, userId])
+  @@index([userId])
+}
+
+model Invitation {
+  id          String    @id @default(cuid())
+  boardId     String
+  email       String
+  token       String    @unique @default(cuid())
+  invitedById String
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  board       Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  invitedBy   User      @relation("SentInvitations", fields: [invitedById], references: [id])
+  createdAt   DateTime  @default(now())
+
+  @@index([boardId])
+  @@index([token])
+}
+
+model Column {
+  id        String   @id @default(cuid())
+  title     String
+  position  String
+  boardId   String
+  board     Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  cards     Card[]
+  createdAt DateTime @default(now())
+
+  @@index([boardId])
+}
+
+model Card {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  position    String
+  dueDate     DateTime?
+  columnId    String
+  column      Column    @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([columnId])
+}

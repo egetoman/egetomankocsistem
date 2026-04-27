@@ -1,0 +1,163 @@
+@import "tailwindcss";
+
+/* Force light mode — paper theme is intentionally light-only */
+:root {
+  color-scheme: light;
+}
+
+html, body {
+  background-color: #B09270;
+}
+
+@theme inline {
+  --color-canvas: #B09270;
+  --color-paper: #FFF9EF;
+  --color-notecard: #FFFDF0;
+  --color-ink: #2C1810;
+  --color-ink-muted: #8A6A58;
+  --color-ink-faint: #C4A882;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-hand), "Segoe UI", sans-serif;
+  font-size: 1.125rem;
+  color: #2C1810;
+  background-color: #B09270 !important;
+}
+
+/* Cork board texture */
+.cork-texture {
+  background-color: #B09270;
+  background-image:
+    radial-gradient(ellipse at 18% 28%, rgba(180, 150, 110, 0.55) 0%, transparent 38%),
+    radial-gradient(ellipse at 76% 68%, rgba(138, 104, 62, 0.45) 0%, transparent 32%),
+    radial-gradient(ellipse at 52% 8%,  rgba(168, 138, 92, 0.35) 0%, transparent 28%),
+    radial-gradient(ellipse at 8% 82%, rgba(118, 88, 52, 0.45) 0%, transparent 24%),
+    radial-gradient(ellipse at 88%, 38%, rgba(192, 162, 112, 0.35) 0%, transparent 32%),
+    radial-gradient(ellipse at 38%, 58%, rgba(152, 122, 78, 0.5)  0%, transparent 42%),
+    radial-gradient(ellipse at 62%, 22%, rgba(144, 112, 70, 0.4)  0%, transparent 30%);
+}
+
+/* Paper column */
+.paper-column {
+  background-color: #FFF9EF;
+  box-shadow:
+    3px 4px 0 rgba(44, 24, 16, 0.09),
+    6px 8px 0 rgba(44, 24, 16, 0.04),
+    0 0 0 1px rgba(44, 24, 16, 0.06);
+}
+
+/* Notecard with ruled lines */
+.paper-card {
+  background-color: #FFFDF0;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    rgba(196, 168, 130, 0.28) 27px,
+    rgba(196, 168, 130, 0.28) 28px
+  );
+  background-position: 0 36px;
+  box-shadow:
+    1px 2px 4px rgba(44, 24, 16, 0.12),
+    0 0 0 1px rgba(44, 24, 16, 0.05);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.paper-card:hover {
+  box-shadow:
+    2px 4px 8px rgba(44, 24, 16, 0.18),
+    0 0 0 1px rgba(44, 24, 16, 0.08);
+}
+
+/* Paper input — bottom border only, looks like a writing line */
+.ink-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid #C4A882;
+  border-radius: 0;
+  outline: none;
+  font-family: var(--font-hand), cursive;
+  font-size: 1.125rem;
+  color: #2C1810;
+  width: 100%;
+  padding: 4px 2px;
+  transition: border-color 0.15s ease;
+}
+
+.ink-input:focus {
+  border-bottom-color: #2C1810;
+}
+
+.ink-input::placeholder {
+  color: #C4A882;
+}
+
+/* Stamp button */
+.stamp-btn {
+  background-color: #2C1810;
+  color: #FFF9EF;
+  font-family: var(--font-hand), cursive;
+  font-size: 1.1rem;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.stamp-btn:hover {
+  background-color: #1A0E0A;
+  transform: translateY(-1px);
+}
+
+.stamp-btn:active {
+  transform: translateY(0);
+}
+
+.stamp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Column drag handle — hidden until column is hovered */
+.column-wrapper .column-handle {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  cursor: grab;
+  color: #C4A882;
+  font-size: 1.1rem;
+  padding: 0 6px 0 0;
+  flex-shrink: 0;
+  line-height: 1;
+  user-select: none;
+  display: flex;
+  align-items: center;
+}
+.column-wrapper:hover .column-handle {
+  opacity: 1;
+}
+.column-handle:active {
+  cursor: grabbing;
+}
+
+/* Ghost button */
+.ghost-btn {
+  background: transparent;
+  border: 1.5px dashed #C4A882;
+  color: #8A6A58;
+  font-family: var(--font-hand), cursive;
+  font-size: 1.05rem;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.ghost-btn:hover {
+  border-color: #8A6A58;
+  color: #2C1810;
+}
